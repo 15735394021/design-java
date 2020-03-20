@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `userid_archivesid`;
 CREATE TABLE `userid_archivesid`  (
   `user_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_croatian_ci NOT NULL COMMENT 'user表的user_id字段',
   `archives_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_croatian_ci NOT NULL COMMENT 'archives表的archives_id字段',
-  `dr` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci NULL DEFAULT NULL COMMENT '该档案是否禁用 0：正常 ；1：禁用',
+  `dr` varchar(1) CHARACTER SET utf8 COLLATE utf8_croatian_ci NULL DEFAULT NULL COMMENT '该档案是否禁用 0：正常 ；1：禁用',
   PRIMARY KEY (`user_id`, `archives_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_croatian_ci ROW_FORMAT = Dynamic;
 
