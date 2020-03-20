@@ -8,6 +8,6 @@ public class Test {
     @RequestMapping("/hehe")
     public Object test(){
 
-        return "哈哈";
+        return "哈哈，爸爸在";
     }
 }
