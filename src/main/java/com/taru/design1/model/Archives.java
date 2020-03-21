@@ -3,6 +3,7 @@ package com.taru.design1.model;
 import java.util.Date;
 
 public class Archives {
+    private String userId;
     private String archivesId;
     private String archivesName;
     private String archivesDescribe;
@@ -15,6 +16,14 @@ public class Archives {
     private String propStackId;
     private Date ts;
     private String dr;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getArchivesId() {
         return archivesId;

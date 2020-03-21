@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.taru.design1.dao.UserDao">
+    <resultMap id="BaseUser" type="com.taru.design1.model.User">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="age" property="age"/>
+        <result column="sex" property="sex"/>
+        <result column="qq" property="qq"/>
+        <result column="email" property="email"/>
+        <result column="ts" property="ts"/>
+    </resultMap>
+    <sql id="users_table">
+       user_id,user_name,age,sex,qq,email,ts
+    </sql>
+    <select id="login" resultMap="BaseUser">
+        select * from users where user_id=#{userId} and dr ='0'
+    </select>
+    <insert id="regist" parameterType="com.taru.design1.model.User">
+        insert into users <include refid="users_table"/> values (#{userId},#{userName},#{age},#{sex},#{qq},#{email},now())
+    </insert>
+    <update id="delete" parameterType="com.taru.design1.model.User">
+        update users set dr = '1'  where user_id=#{userId}
+    </update>
+    <update id="update" parameterType="com.taru.design1.model.User">
+        update users
+        <set>
+            <if test="username!= null and username != '' ">
+                user_name = #{userName},
+            </if>
+            <if test="age != null and age != '' ">
+                age = #{age},
+            </if>
+            <if test="sex!= null and sex!= '' ">
+                sex = #{sex},
+            </if>
+            <if test="qq != null and qq != '' ">
+                qq = #{qq},
+            </if>
+            <if test="email != null and email != '' ">
+                email = #{email},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+</mapper>

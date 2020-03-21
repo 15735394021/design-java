@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.taru.design1.dao.ArchivesDao">
+    <resultMap id="BaseArchives" type="com.taru.design1.model.Archives">
+        <id property="archivesId" column="archives_id" />
+        <result property="archivesName" column="archives_name" />
+        <result property="archivesDescribe" column="archives_describe" />
+        <result property="userGarde" column="user_grade" />
+        <result property="userExperience" column="user_experience" />
+        <result property="userHp" column="user_hp" />
+        <result property="usrtMp" column="user_mp" />
+        <result property="checkPoint" column="checkpoint" />
+        <result property="drugStackId" column="drug_stack_id" />
+        <result property="propStackId" column="prop_stack_id" />
+        <result property="ts" column="ts" />
+    </resultMap>
+    <resultMap id="BaseDrugs" type="com.taru.design1.model.Drugs">
+        <id column="drug_stack_id" property="drugStackId"/>
+        <result column="drugs_id" property="drugsId"/>
+    </resultMap>
+    <resultMap id="BaseProp" type="com.taru.design1.model.Prop">
+        <id column="prop_stack_id" property="propStackId"/>
+        <result column="prop_id" property="propId"/>
+    </resultMap>
+    <resultMap id="BaseArvhivesDetail" type="com.taru.design1.vo.ArchivesDetail">
+        <result column="archives_id" property="archivesId"/>
+        <result column="drugs_id" property="drugsId"/>
+        <result column="drugs_name" property="drugsName"/>
+        <result column="drugs_type_id" property="drugsTypeId"/>
+        <result column="hp_reply" property="hpReply"/>
+        <result column="mp_reply" property="mpReply"/>
+        <result column="prop_id" property="propId"/>
+        <result column="prop_name" property="propName"/>
+        <result column="prop_type_id" property="propTypeId"/>
+    </resultMap>
+    <sql id="archives_table">
+        archives_id,archives_name,archives_describe,user_grade,user_experience,user_hp,user_mp,checkPoint,drug_stack_id,prop_stack_id,ts
+    </sql>
+    <!--查询档案列表-->
+    <select id="queryArchives" parameterType="com.taru.design1.model.User" resultMap="BaseArchives">
+        select av.archives_id,av.archives_name,av.archives_describe,av.checkpoint,av.ts,av.user_hp,av.user_mp
+            from users us
+                left join userid_archivesid ua on us.user_id=ua.user_id
+                    left join archives av on ua.archives_id=av.archives_id
+                        where us.user_id=#{userId} and ua.dr ='0'
+    </select>
+    <!--存档1，与下面存档2同时使用,保存archives表-->
+    <insert id="saveArchives" parameterType="com.taru.design1.model.Archives">
+        insert into archives <include refid="archives_table"/>
+            values (#{archivesId},#{archivesName},#{archivesDescribe},#{userGarde},#{userExperience},#{userHp},#{usrtMp},#{checkPoint},#{drugStackId},#{propStackId},now())
+    </insert>
+    <!--存档2，与存档1同时使用，保存userid_archivesid表-->
+    <insert id="saveUserIdArchives" parameterType="com.taru.design1.model.Archives">
+        insert into userid_archivesid(user_id,archives_id,dr) values(#{userId},#{archivesId},'0')
+    </insert>
+    <!--存档3，保存stack_prop表-->
+    <insert id="saveStackProp" parameterType="com.taru.design1.model.Prop">
+        insert into stack_prop(prop_stack_id,prop_id) values
+        <foreach collection="props" index="index" item="item" separator="," >
+              (#{propStackId},#{item})
+         </foreach>
+--         insert into stack_prop(prop_stack_id,prop_id) values (#{propStackId},#{propId})
+    </insert>
+    <!--存档4，保存stack_drugs表-->
+    <insert id="saveStackDrugs" parameterType="com.taru.design1.model.Drugs">
+        insert into  stack_drugs(drug_stack_id,drugs_id) values
+        <foreach collection="props" index="index" item="item" separator="," >
+            (#{drugStackId},#{item})
+        </foreach>
+--         insert into  stack_drugs(drug_stack_id,drugs_id) values (#{drugStackId},#{drugsId})
+    </insert>
+    <!--更新档案1,更新archives表，与下面同时使用，更新背包表-->
+    <update id="updateArchives" parameterType="com.taru.design1.model.Archives">
+        update archives set user_grade=#{userGarde},user_experience=#{userExperience},user_hp=#{userHp},user_mp=#{usrtMp},checkPoint=#{checkPoint},ts=now()
+            where archives_id=#{archivesId}
+    </update>
+    <!--更新档案2，更改drugs表，更新医药背包表,新增药品-->
+    <insert id="addDrug" parameterType="com.taru.design1.model.Drugs">
+        insert into  stack_drugs(drug_stack_id,drugs_id) values
+        <foreach collection="props" index="index" item="item" separator="," >
+            (#{drugStackId},#{item})
+        </foreach>
+--         insert into  stack_drugs(drug_stack_id,drugs_id) values (#{drugStackId},#{drugsId})
+    </insert>
+    <!--更新档案3，更改drugs表，更新医药背包，删除药品-->
+    <delete id="delDrug" parameterType="com.taru.design1.model.Prop">
+        delete from drugs where drug_stack_id=#{drugStackId}
+    </delete>
+    <!--更新档案4，更改prop表，更新道具背包，新增道具-->
+    <insert id="addProp" parameterType="com.taru.design1.model.Prop">
+        insert into stack_prop(prop_stack_id,prop_id) values
+        <foreach collection="props" index="index" item="item" separator="," >
+            (#{propStackId},#{item})
+        </foreach>
+--         insert into stack_prop(prop_stack_id,prop_id) values (#{propStackId},#{propId})
+    </insert>
+    <!--更新档案5，更新prop表，更新道具背包，删除道具-->
+    <delete id="delProp" parameterType="com.taru.design1.model.Prop">
+        delete from prop where prop_stack_id=#{propStackId}
+    </delete>
+    <!--查询档案详情1，即 进入游戏后的按纪录加载场景   prop-->
+    <select id="beginGameProp" parameterType="com.taru.design1.model.Archives" resultMap="BaseArvhivesDetail">
+        select ac.archives_id,ac.prop_stack_id,pp.prop_id,pp.prop_name,pp.prop_type_id from archives ac
+            left join stack_prop sp on ac.prop_stack_id=sp.prop_stack_id
+                left join prop pp on sp.prop_id=pp.prop_id
+                    where ac.archives_id=#{archivesId}
+    </select>
+    <!--查询档案详情2，即 进入游戏后的按纪录加载场景  drugs-->
+    <select id="beginGameDrugs" parameterType="com.taru.design1.model.Archives" resultMap="BaseArvhivesDetail">
+        select ac.archives_id,ac.drug_stack_id,dd.drugs_id,dd.drugs_name,dd.drugs_type_id,dd.hp_reply,dd.mp_reply from archives ac
+            left join stack_drugs sd on ac.drug_stack_id=sd.drug_stack_id
+                left join drugs dd on sd.drugs_id=dd.drugs_id
+                    where ac.archives_id=#{archivesId}
+    </select>
+</mapper>
