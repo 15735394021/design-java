@@ -33,11 +33,11 @@ public class UserController {
         }
         return objectVo;
     }
-//    @RequestMapping(value = "/regist",method = RequestMethod.POST)
-//    public User regist(User user){
-//        User regist = userServiceimpl.regist(user);
-//        return regist;
-//    }
+    @RequestMapping(value = "/regist",method = RequestMethod.POST)
+    public User regist(User user){
+        User regist = userServiceimpl.regist(user);
+        return regist;
+    }
     //注销
     @RequestMapping(value = "/delete",method = RequestMethod.GET)
     public ObjectVo cancel(User user){

@@ -5,8 +5,9 @@
         <id property="archivesId" column="archives_id" />
         <result property="archivesName" column="archives_name" />
         <result property="archivesDescribe" column="archives_describe" />
-        <result property="userGarde" column="user_grade" />
+        <result property="userGrade" column="user_grade" />
         <result property="userExperience" column="user_experience" />
+        <result property="userGold" column="user_gold" />
         <result property="userHp" column="user_hp" />
         <result property="usrtMp" column="user_mp" />
         <result property="checkPoint" column="checkpoint" />
@@ -34,11 +35,11 @@
         <result column="prop_type_id" property="propTypeId"/>
     </resultMap>
     <sql id="archives_table">
-        archives_id,archives_name,archives_describe,user_grade,user_experience,user_hp,user_mp,checkPoint,drug_stack_id,prop_stack_id,ts
+        archives_id,archives_name,archives_describe,user_grade,user_experience,user_gold,user_hp,user_mp,checkPoint,drug_stack_id,prop_stack_id,ts
     </sql>
     <!--查询档案列表-->
     <select id="queryArchives" parameterType="com.taru.design1.model.User" resultMap="BaseArchives">
-        select av.archives_id,av.archives_name,av.archives_describe,av.checkpoint,av.ts,av.user_hp,av.user_mp
+        select av.archives_id,av.archives_name,av.archives_describe,av.checkpoint,av.ts,av.user_hp,av.user_mp,av.user_grade,av.user_experience,av.user_gold
             from users us
                 left join userid_archivesid ua on us.user_id=ua.user_id
                     left join archives av on ua.archives_id=av.archives_id
@@ -47,7 +48,7 @@
     <!--存档1，与下面存档2同时使用,保存archives表-->
     <insert id="saveArchives" parameterType="com.taru.design1.model.Archives">
         insert into archives <include refid="archives_table"/>
-            values (#{archivesId},#{archivesName},#{archivesDescribe},#{userGarde},#{userExperience},#{userHp},#{usrtMp},#{checkPoint},#{drugStackId},#{propStackId},now())
+            values (#{archivesId},#{archivesName},#{archivesDescribe},#{userGarde},#{userExperience},#{userGold},#{userHp},#{usrtMp},#{checkPoint},#{drugStackId},#{propStackId},now())
     </insert>
     <!--存档2，与存档1同时使用，保存userid_archivesid表-->
     <insert id="saveUserIdArchives" parameterType="com.taru.design1.model.Archives">

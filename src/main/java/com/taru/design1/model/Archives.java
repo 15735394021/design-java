@@ -7,8 +7,9 @@ public class Archives {
     private String archivesId;
     private String archivesName;
     private String archivesDescribe;
-    private String userGarde;
+    private String userGrade;
     private String userExperience;
+    private String userGold;
     private String userHp;
     private String usrtMp;
     private String checkPoint;
@@ -16,6 +17,22 @@ public class Archives {
     private String propStackId;
     private Date ts;
     private String dr;
+
+    public String getUserGrade() {
+        return userGrade;
+    }
+
+    public void setUserGrade(String userGrade) {
+        this.userGrade = userGrade;
+    }
+
+    public String getUserGold() {
+        return userGold;
+    }
+
+    public void setUserGold(String userGold) {
+        this.userGold = userGold;
+    }
 
     public String getUserId() {
         return userId;
@@ -47,14 +64,6 @@ public class Archives {
 
     public void setArchivesDescribe(String archivesDescribe) {
         this.archivesDescribe = archivesDescribe;
-    }
-
-    public String getUserGarde() {
-        return userGarde;
-    }
-
-    public void setUserGarde(String userGarde) {
-        this.userGarde = userGarde;
     }
 
     public String getUserExperience() {
