@@ -23,14 +23,15 @@ public class UserServiceImpl implements UserService {
         }
     }
     @Override
-    public User regist(User user) {
+    public Integer regist(User user) {
         Integer regist = userDaoImpl.regist(user);
-        if(regist > 0){
-            User login = login(user);
-            return login;
-        }else{
-            return null;
-        }
+//        if(regist > 0){
+//            User login = login(user);
+//            return login;
+//        }else{
+//            return null;
+//        }
+        return regist;
     }
     @Override
     public Integer delete(User user) {

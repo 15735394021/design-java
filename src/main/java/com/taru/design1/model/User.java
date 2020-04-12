@@ -6,12 +6,21 @@ public class User {
     private Long id;
     private String userId;
     private String userName;
+    private String userPassword;
     private Long age;
     private String sex;
     private String qq;
     private String email;
     private Date ts;
     private String dr;
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
 
     public Long getId() {
         return id;

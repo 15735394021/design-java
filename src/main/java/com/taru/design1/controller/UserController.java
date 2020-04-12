@@ -24,19 +24,26 @@ public class UserController {
         ObjectVo objectVo = new ObjectVo(0);
         User user1 = userServiceimpl.login(user);
         if(user1 != null){
-        redisUtil.set("userId",user1.getUserId());
+            redisUtil.set("userId",user1.getUserId());
+//            objectVo.setData(user1);
+//        }else{
+//            User regist = userServiceimpl.regist(user);
+//            redisUtil.set("userId",regist.getUserId());
             objectVo.setData(user1);
-        }else{
-            User regist = userServiceimpl.regist(user);
-            redisUtil.set("userId",regist.getUserId());
-            objectVo.setData(regist);
+        }else {
+            objectVo.setStatus(1);
         }
         return objectVo;
     }
-    @RequestMapping(value = "/regist",method = RequestMethod.POST)
-    public User regist(User user){
-        User regist = userServiceimpl.regist(user);
-        return regist;
+    @RequestMapping(value = "/regist",method = RequestMethod.GET)
+    public ObjectVo regist(User user){
+        ObjectVo objectVo = new ObjectVo(1);
+        Integer regist = userServiceimpl.regist(user);
+        if(regist > 0){
+            objectVo.setStatus(0);
+            objectVo.setMessage("注册成功");
+        }
+        return objectVo;
     }
     //注销
     @RequestMapping(value = "/delete",method = RequestMethod.GET)

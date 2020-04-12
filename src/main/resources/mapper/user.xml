@@ -5,6 +5,7 @@
         <id column="id" property="id"/>
         <result column="user_id" property="userId"/>
         <result column="user_name" property="userName"/>
+        <result column="user_password" property="userPassword"/>
         <result column="age" property="age"/>
         <result column="sex" property="sex"/>
         <result column="qq" property="qq"/>
@@ -12,13 +13,13 @@
         <result column="ts" property="ts"/>
     </resultMap>
     <sql id="users_table">
-       user_id,user_name,age,sex,qq,email,ts
+       user_id,user_name,user_password,age,sex,qq,email,ts
     </sql>
     <select id="login" resultMap="BaseUser">
-        select * from users where user_id=#{userId} and dr ='0'
+        select id,user_id,user_name,age,sex,qq,email,ts from users where user_id=#{userId} and user_password = #{userPassword} and dr ='0'
     </select>
     <insert id="regist" parameterType="com.taru.design1.model.User">
-        insert into users <include refid="users_table"/> values (#{userId},#{userName},#{age},#{sex},#{qq},#{email},now())
+        insert into users (<include refid="users_table"/>) values (#{userId},#{userName},#{userPassword},#{age},#{sex},#{qq},#{email},now())
     </insert>
     <update id="delete" parameterType="com.taru.design1.model.User">
         update users set dr = '1'  where user_id=#{userId}
