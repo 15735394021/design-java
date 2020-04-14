@@ -36,9 +36,9 @@ public class ArchivesController {
     }
     //存档
     @RequestMapping(value = "/saveArchives",method = RequestMethod.POST)
-    public ObjectVo saveArchives(String userId,Archives archives,String[] drugsId,String[] propId){
+    public ObjectVo saveArchives(String userId,Archives archives,String[] drugsId,Integer[] drugsNum,String[] propId,Integer[] propNum){
         ObjectVo objectVo = new ObjectVo(0);
-        Integer integer = archivesServiceImpl.saveArchives(userId, archives, drugsId, propId);
+        Integer integer = archivesServiceImpl.saveArchives(userId, archives, drugsId,drugsNum, propId,propNum);
         if(integer != 4){
             objectVo.setStatus(1);
             objectVo.setMessage("存档失败，数据已回滚");
@@ -47,9 +47,9 @@ public class ArchivesController {
     }
     //更新存档
     @RequestMapping(value = "/updateArchives",method = RequestMethod.POST)
-    public ObjectVo updateArchives(Archives archives,String[] drugsId,String[] propId){
+    public ObjectVo updateArchives(Archives archives,String[] drugsId,Integer[] drugsNum,String[] propId,Integer[] propNum){
         ObjectVo objectVo = new ObjectVo(0);
-        Integer integer = archivesServiceImpl.updateArchives(archives, drugsId, propId);
+        Integer integer = archivesServiceImpl.updateArchives(archives, drugsId,drugsNum, propId,propNum);
         if(integer != 3){
             objectVo.setStatus(1);
             objectVo.setMessage("更新档案失败，数据已回滚");

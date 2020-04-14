@@ -8,10 +8,55 @@ public class ArchivesDetail {
     private String drugsTypeId;
     private String hpReply;
     private String mpReply;
+    private Integer drugsNum;
 
     private String propId;
     private String propName;
     private String propTypeId;
+    private Integer propNum;
+    private String addSpeed;
+    private String addHurt;
+    private String addDefense;
+
+    public String getAddSpeed() {
+        return addSpeed;
+    }
+
+    public void setAddSpeed(String addSpeed) {
+        this.addSpeed = addSpeed;
+    }
+
+    public String getAddHurt() {
+        return addHurt;
+    }
+
+    public void setAddHurt(String addHurt) {
+        this.addHurt = addHurt;
+    }
+
+    public String getAddDefense() {
+        return addDefense;
+    }
+
+    public void setAddDefense(String addDefense) {
+        this.addDefense = addDefense;
+    }
+
+    public Integer getDrugsNum() {
+        return drugsNum;
+    }
+
+    public void setDrugsNum(Integer drugsNum) {
+        this.drugsNum = drugsNum;
+    }
+
+    public Integer getPropNum() {
+        return propNum;
+    }
+
+    public void setPropNum(Integer propNum) {
+        this.propNum = propNum;
+    }
 
     public String getArchivesId() {
         return archivesId;

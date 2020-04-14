@@ -1,5 +1,7 @@
 package com.taru.design1.model;
 
+import com.taru.design1.vo.ArchivesDetail;
+
 import java.util.List;
 
 public class Prop {
@@ -9,13 +11,22 @@ public class Prop {
     private String propTypeId;
     private String hpReply;
     private String mpReply;
-    private List<String> props;
+    private Integer propNum;
+    private List<ArchivesDetail> props;
 
-    public List<String> getProps() {
+    public Integer getPropNum() {
+        return propNum;
+    }
+
+    public void setPropNum(Integer propNum) {
+        this.propNum = propNum;
+    }
+
+    public List<ArchivesDetail> getProps() {
         return props;
     }
 
-    public void setProps(List<String> props) {
+    public void setProps(List<ArchivesDetail> props) {
         this.props = props;
     }
 

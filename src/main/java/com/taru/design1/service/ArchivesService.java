@@ -12,9 +12,9 @@ public interface ArchivesService {
 
     List<Archives> queryArchives(User user);
 
-    Integer saveArchives(String userId,Archives archives,String[] drugsId,String[] propId);
+    Integer saveArchives(String userId,Archives archives,String[] drugsId,Integer[] drugsNum,String[] propId,Integer[] propNum);
 
-    Integer updateArchives(Archives archives,String[] drugsId,String[] propId);
+    Integer updateArchives(Archives archives,String[] drugsId,Integer[] drugsNum,String[] propId,Integer[] propNum);
 
     List<ArchivesDetail> beginGameProp(Archives archives);
     List<ArchivesDetail> beginGameDrugs(Archives archives);

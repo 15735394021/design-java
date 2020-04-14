@@ -27,7 +27,7 @@ public class ArchivesServiceImpl implements ArchivesService {
 
     @Override
     @Transactional   //事务
-    public Integer saveArchives(String userId,Archives archives,String[] drugsId,String[] propId) {
+    public Integer saveArchives(String userId,Archives archives,String[] drugsId,Integer[] drugsNum,String[] propId,Integer[] propNum) {
         int i = 0;
         String archivesId = getRandom1(8);
         String propStackId = getRandom1(8);
@@ -43,23 +43,28 @@ public class ArchivesServiceImpl implements ArchivesService {
             i++;
         }
         Drugs drugs = new Drugs();
-        List<String> drugs1 = drugs.getDrugs();
+        List<ArchivesDetail> drugs1 = drugs.getDrugs();
         drugs.setDrugStackId(drugsStackId);
-        for (String s : drugsId) {
-            drugs1.add(s);
+        for (int j = 0; j < drugsId.length; j++) {
+            ArchivesDetail archivesDetail = new ArchivesDetail();
+            archivesDetail.setDrugsId(drugsId[i]);
+            archivesDetail.setDrugsNum(drugsNum[i]);
+            drugs1.add(archivesDetail);
         }
-//        drugs.setDrugs(drugs1);
         Integer integer2 = archivesDaoImpl.saveStackDrugs(drugs);
         if(integer2 > 0){
             i++;
         }
+
         Prop prop = new Prop();
-        List<String> props = prop.getProps();
+        List<ArchivesDetail> props = prop.getProps();
         prop.setPropStackId(propStackId);
-        for (String s : propId) {
-            props.add(s);
+        for (int j = 0; j < propId.length; j++) {
+            ArchivesDetail archivesDetail = new ArchivesDetail();
+            archivesDetail.setPropId(propId[i]);
+            archivesDetail.setPropNum(propNum[i]);
+            drugs1.add(archivesDetail);
         }
-//        prop.setProps(props);
         Integer integer3 = archivesDaoImpl.saveStackProp(prop);
         if(integer3 > 0){
             i++;
@@ -69,32 +74,36 @@ public class ArchivesServiceImpl implements ArchivesService {
 
     @Override
     @Transactional   //事务
-    public Integer updateArchives(Archives archives,String[] drugsId,String[] propId) {
+    public Integer updateArchives(Archives archives,String[] drugsId,Integer[] drugsNum,String[] propId,Integer[] propNum) {
         int i = 0;
         Integer integer = archivesDaoImpl.updateArchives(archives);
         if(integer > 0){
             i++;
         }
         Drugs drugs = new Drugs();
-        drugs.setDrugStackId(archives.getArchivesId());
+        drugs.setDrugStackId(archives.getDrugStackId());
         archivesDaoImpl.delDrug(drugs);
-        List<String> drugs1 = drugs.getDrugs();
-        for (String s : drugsId) {
-            drugs1.add(s);
+        List<ArchivesDetail> drugs1 = drugs.getDrugs();
+        for (int j = 0; j < drugsId.length; j++) {
+            ArchivesDetail archivesDetail = new ArchivesDetail();
+            archivesDetail.setDrugsId(drugsId[i]);
+            archivesDetail.setDrugsNum(drugsNum[i]);
+            drugs1.add(archivesDetail);
         }
-//        drugs.setDrugs(drugs1);
         Integer integer1 = archivesDaoImpl.addDrug(drugs);
         if(integer1 > 0){
             i++;
         }
         Prop prop = new Prop();
-        prop.setPropStackId(archives.getArchivesId());
+        prop.setPropStackId(archives.getPropStackId());
         archivesDaoImpl.delProp(prop);
-        List<String> props = prop.getProps();
-        for (String s : propId) {
-            props.add(s);
+        List<ArchivesDetail> props = prop.getProps();
+        for (int j = 0; j < propId.length; j++) {
+            ArchivesDetail archivesDetail = new ArchivesDetail();
+            archivesDetail.setPropId(propId[i]);
+            archivesDetail.setPropNum(propNum[i]);
+            drugs1.add(archivesDetail);
         }
-//        prop.setProps(props);
         Integer integer2 = archivesDaoImpl.addProp(prop);
         if(integer2 > 0){
            i++;

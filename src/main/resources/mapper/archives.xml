@@ -18,21 +18,28 @@
     <resultMap id="BaseDrugs" type="com.taru.design1.model.Drugs">
         <id column="drug_stack_id" property="drugStackId"/>
         <result column="drugs_id" property="drugsId"/>
+        <result column="drugs_num" property="drugsNum"/>
     </resultMap>
     <resultMap id="BaseProp" type="com.taru.design1.model.Prop">
         <id column="prop_stack_id" property="propStackId"/>
         <result column="prop_id" property="propId"/>
+        <result column="prop_num" property="propNum"/>
     </resultMap>
     <resultMap id="BaseArvhivesDetail" type="com.taru.design1.vo.ArchivesDetail">
         <result column="archives_id" property="archivesId"/>
         <result column="drugs_id" property="drugsId"/>
         <result column="drugs_name" property="drugsName"/>
         <result column="drugs_type_id" property="drugsTypeId"/>
+        <result column="drugs_num" property="drugsNum"/>
         <result column="hp_reply" property="hpReply"/>
         <result column="mp_reply" property="mpReply"/>
         <result column="prop_id" property="propId"/>
         <result column="prop_name" property="propName"/>
         <result column="prop_type_id" property="propTypeId"/>
+        <result column="prop_num" property="propNum"/>
+        <result column="add_speed" property="addSpeed"/>
+        <result column="add_hurt" property="addHurt"/>
+        <result column="add_defense" property="addDefense"/>
     </resultMap>
     <sql id="archives_table">
         archives_id,archives_name,archives_describe,user_grade,user_experience,user_gold,user_hp,user_mp,checkPoint,drug_stack_id,prop_stack_id,ts
@@ -56,59 +63,59 @@
     </insert>
     <!--存档3，保存stack_prop表-->
     <insert id="saveStackProp" parameterType="com.taru.design1.model.Prop">
-        insert into stack_prop(prop_stack_id,prop_id) values
+        insert into stack_prop(prop_stack_id,prop_id,prop_num) values
         <foreach collection="props" index="index" item="item" separator="," >
-              (#{propStackId},#{item})
+              (#{propStackId},#{item.propId},#{item.propNum})
          </foreach>
 --         insert into stack_prop(prop_stack_id,prop_id) values (#{propStackId},#{propId})
     </insert>
     <!--存档4，保存stack_drugs表-->
     <insert id="saveStackDrugs" parameterType="com.taru.design1.model.Drugs">
-        insert into  stack_drugs(drug_stack_id,drugs_id) values
-        <foreach collection="props" index="index" item="item" separator="," >
-            (#{drugStackId},#{item})
+        insert into  stack_drugs(drug_stack_id,drugs_id,drugs_num) values
+        <foreach collection="drugs" index="index" item="item" separator="," >
+            (#{drugStackId},#{item.drugsId},#{item.drugsNum})
         </foreach>
 --         insert into  stack_drugs(drug_stack_id,drugs_id) values (#{drugStackId},#{drugsId})
     </insert>
     <!--更新档案1,更新archives表，与下面同时使用，更新背包表-->
     <update id="updateArchives" parameterType="com.taru.design1.model.Archives">
-        update archives set user_grade=#{userGarde},user_experience=#{userExperience},user_hp=#{userHp},user_mp=#{usrtMp},checkPoint=#{checkPoint},ts=now()
+        update archives set user_grade=#{userGarde},user_experience=#{userExperience},user_gold=#{userGold},user_hp=#{userHp},user_mp=#{usrtMp},checkPoint=#{checkPoint},ts=now()
             where archives_id=#{archivesId}
     </update>
     <!--更新档案2，更改drugs表，更新医药背包表,新增药品-->
     <insert id="addDrug" parameterType="com.taru.design1.model.Drugs">
-        insert into  stack_drugs(drug_stack_id,drugs_id) values
-        <foreach collection="props" index="index" item="item" separator="," >
-            (#{drugStackId},#{item})
+        insert into  stack_drugs(drug_stack_id,drugs_id,drugs_num) values
+        <foreach collection="drugs" index="index" item="item" separator="," >
+            (#{drugStackId},#{item.drugsId},#{item.drugsNum})
         </foreach>
 --         insert into  stack_drugs(drug_stack_id,drugs_id) values (#{drugStackId},#{drugsId})
     </insert>
     <!--更新档案3，更改drugs表，更新医药背包，删除药品-->
-    <delete id="delDrug" parameterType="com.taru.design1.model.Prop">
-        delete from drugs where drug_stack_id=#{drugStackId}
+    <delete id="delDrug" parameterType="com.taru.design1.model.Drugs">
+        delete from stack_drugs where drug_stack_id=#{drugStackId}
     </delete>
     <!--更新档案4，更改prop表，更新道具背包，新增道具-->
     <insert id="addProp" parameterType="com.taru.design1.model.Prop">
-        insert into stack_prop(prop_stack_id,prop_id) values
+        insert into stack_prop(prop_stack_id,prop_id,prop_num) values
         <foreach collection="props" index="index" item="item" separator="," >
-            (#{propStackId},#{item})
+            (#{propStackId},#{item.propId},#{item.propNum})
         </foreach>
 --         insert into stack_prop(prop_stack_id,prop_id) values (#{propStackId},#{propId})
     </insert>
     <!--更新档案5，更新prop表，更新道具背包，删除道具-->
     <delete id="delProp" parameterType="com.taru.design1.model.Prop">
-        delete from prop where prop_stack_id=#{propStackId}
+        delete from stack_prop where prop_stack_id=#{propStackId}
     </delete>
     <!--查询档案详情1，即 进入游戏后的按纪录加载场景   prop-->
     <select id="beginGameProp" parameterType="com.taru.design1.model.Archives" resultMap="BaseArvhivesDetail">
-        select ac.archives_id,ac.prop_stack_id,pp.prop_id,pp.prop_name,pp.prop_type_id from archives ac
+        select ac.archives_id,ac.prop_stack_id,pp.prop_id,pp.prop_name,pp.prop_type_id,sp.prop_num,pp.add_speed,pp.add_hurt,pp.add_defense from archives ac
             left join stack_prop sp on ac.prop_stack_id=sp.prop_stack_id
                 left join prop pp on sp.prop_id=pp.prop_id
                     where ac.archives_id=#{archivesId}
     </select>
     <!--查询档案详情2，即 进入游戏后的按纪录加载场景  drugs-->
     <select id="beginGameDrugs" parameterType="com.taru.design1.model.Archives" resultMap="BaseArvhivesDetail">
-        select ac.archives_id,ac.drug_stack_id,dd.drugs_id,dd.drugs_name,dd.drugs_type_id,dd.hp_reply,dd.mp_reply from archives ac
+        select ac.archives_id,ac.drug_stack_id,dd.drugs_id,dd.drugs_name,dd.drugs_type_id,dd.hp_reply,dd.mp_reply,sd.drugs_num from archives ac
             left join stack_drugs sd on ac.drug_stack_id=sd.drug_stack_id
                 left join drugs dd on sd.drugs_id=dd.drugs_id
                     where ac.archives_id=#{archivesId}
