@@ -20,8 +20,8 @@ public class ArchivesServiceImpl implements ArchivesService {
     private ArchivesDao archivesDaoImpl;
 
     @Override
-    public List<Archives> queryArchives(User user) {
-        List<Archives> archives = archivesDaoImpl.queryArchives(user);
+    public List<Archives> queryArchives(Archives archives1) {
+        List<Archives> archives = archivesDaoImpl.queryArchives(archives1);
         return archives;
     }
 

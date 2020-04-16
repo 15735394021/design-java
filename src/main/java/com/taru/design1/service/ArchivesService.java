@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public interface ArchivesService {
 
-    List<Archives> queryArchives(User user);
+    List<Archives> queryArchives(Archives archives);
 
     Integer saveArchives(String userId,Archives archives,String[] drugsId,Integer[] drugsNum,String[] propId,Integer[] propNum);
 

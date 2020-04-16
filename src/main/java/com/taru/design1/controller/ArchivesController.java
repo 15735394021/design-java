@@ -23,9 +23,9 @@ public class ArchivesController {
     private ArchivesService archivesServiceImpl;
 
     @RequestMapping(value = "/queryArchives",method = RequestMethod.GET)
-    public ObjectVo queryArchives(User user){
+    public ObjectVo queryArchives(Archives archives1){
         ObjectVo objectVo = new ObjectVo(0);
-        List<Archives> archives = archivesServiceImpl.queryArchives(user);
+        List<Archives> archives = archivesServiceImpl.queryArchives(archives1);
         if(archives.size() > 0){
             objectVo.setData(archives);
         }else{

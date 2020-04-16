@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper
 public interface ArchivesDao {
     //查询档案列表
-    List<Archives> queryArchives(User user);
+    List<Archives> queryArchives(Archives archives);
     //存档
     Integer saveArchives(Archives archives);
     Integer saveUserIdArchives(Archives archives);

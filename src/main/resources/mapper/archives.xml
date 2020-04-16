@@ -45,12 +45,18 @@
         archives_id,archives_name,archives_describe,user_grade,user_experience,user_gold,user_hp,user_mp,checkPoint,drug_stack_id,prop_stack_id,ts
     </sql>
     <!--查询档案列表-->
-    <select id="queryArchives" parameterType="com.taru.design1.model.User" resultMap="BaseArchives">
+    <select id="queryArchives" parameterType="com.taru.design1.model.Archives" resultMap="BaseArchives">
         select av.archives_id,av.archives_name,av.archives_describe,av.checkpoint,av.ts,av.user_hp,av.user_mp,av.user_grade,av.user_experience,av.user_gold
             from users us
                 left join userid_archivesid ua on us.user_id=ua.user_id
                     left join archives av on ua.archives_id=av.archives_id
-                        where us.user_id=#{userId} and ua.dr ='0'
+                        where  ua.dr ='0'
+                        <if test="userId != null and userId != ''">
+                            and us.user_id=#{userId}
+                        </if>
+                        <if test="archivesId != null and archivesId != ''">
+                            and av.archives_id = #{archivesId}
+                        </if>
     </select>
     <!--存档1，与下面存档2同时使用,保存archives表-->
     <insert id="saveArchives" parameterType="com.taru.design1.model.Archives">
