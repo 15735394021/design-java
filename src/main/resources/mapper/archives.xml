@@ -57,6 +57,7 @@
                         <if test="archivesId != null and archivesId != ''">
                             and av.archives_id = #{archivesId}
                         </if>
+        order by av.ts desc
     </select>
     <!--存档1，与下面存档2同时使用,保存archives表-->
     <insert id="saveArchives" parameterType="com.taru.design1.model.Archives">
